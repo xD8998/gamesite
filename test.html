@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FINAL BOSS: Chaos Swarm V2</title>
+    <style>
+        body { background: #000; color: #fff; text-align: center; overflow: hidden; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        
+        /* The Main Page Smiley */
+        #smiley { font-size: 150px; font-weight: bold; animation: wobble 0.5s infinite, strobe 0.1s infinite; }
+        
+        @keyframes wobble {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(-10px, 10px) rotate(-15deg) scale(1.2); }
+            50% { transform: translate(10px, -10px) rotate(15deg) scale(0.8); }
+            75% { transform: translate(-10px, -10px) rotate(-5deg) scale(1.1); }
+            100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+
+        @keyframes strobe {
+            0% { color: #ff0000; filter: drop-shadow(0 0 20px #ff0000); }
+            50% { color: #00ff00; filter: drop-shadow(0 0 20px #00ff00) invert(100%); }
+            100% { color: #0000ff; filter: drop-shadow(0 0 20px #0000ff); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="smiley">:)</div>
+
+    <script>
+        const TOTAL = 100;
+        let spawned = 0;
+        const screenW = window.screen.availWidth;
+        const screenH = window.screen.availHeight;
+
+        const taunts = [
+            "CAN'T CATCH ME", "OVER HERE", "SYSTEM OVERLOAD", 
+            "TOO SLOW", "EXT KILLED", "BYE BYE RAM"
+        ];
+
+        // Oversized, complex gradients that we will animate with CSS
+        const backgrounds = [
+            "radial-gradient(circle at center, #ff0000 0%, #00ff00 50%, #0000ff 100%)", 
+            "repeating-conic-gradient(from 0deg, #f00 0deg 20deg, #0ff 20deg 40deg)", 
+            "linear-gradient(45deg, #ff00ff, #ffff00, #00ffff, #ff0000)", 
+            "repeating-radial-gradient(circle, #000 10px, #fff 20px, #f00 30px)" 
+        ];
+
+        function spawnChaosNode() {
+            if (spawned >= TOTAL) return;
+
+            const w = 350;
+            const h = 350;
+            const x = Math.floor(Math.random() * (screenW - w));
+            const y = Math.floor(Math.random() * (screenH - h));
+
+            const win = window.open("", `chaos_${spawned}`, `width=${w},height=${h},left=${x},top=${y}`);
+
+            if (win) {
+                const tauntText = taunts[Math.floor(Math.random() * taunts.length)];
+                const bgStyle = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+                win.document.write(`
+                    <html>
+                    <head>
+                        <style>
+                            body { 
+                                margin: 0; display: flex; justify-content: center; align-items: center; 
+                                height: 100vh; overflow: hidden; font-family: 'Impact', sans-serif;
+                                
+                                /* Apply the chosen complex gradient */
+                                background: ${bgStyle}; 
+                                background-size: 400% 400%; /* Make it huge so we can pan it around */
+                                
+                                /* Move the background, wobble it, and strobe the colors simultaneously */
+                                animation: panBg 1s ease-in-out infinite alternate, hyperStrobe 0.08s linear infinite;
+                            }
+                            
+                            h1 { 
+                                font-size: 45px; color: white; text-align: center;
+                                -webkit-text-stroke: 2px black; text-shadow: 3px 3px 0 #000;
+                                animation: textWobble 0.3s infinite;
+                            }
+
+                            /* Physically moves the gradient back and forth */
+                            @keyframes panBg {
+                                0% { background-position: 0% 50%; }
+                                50% { background-position: 100% 100%; }
+                                100% { background-position: 50% 0%; }
+                            }
+
+                            /* Rapid color cycling and inversion */
+                            @keyframes hyperStrobe {
+                                0% { filter: hue-rotate(0deg) invert(0%); }
+                                50% { filter: hue-rotate(180deg) invert(100%); }
+                                100% { filter: hue-rotate(360deg) invert(0%); }
+                            }
+
+                            /* Aggressive text wobble */
+                            @keyframes textWobble {
+                                0% { transform: rotate(0deg) scale(1); }
+                                25% { transform: rotate(-25deg) scale(1.4); }
+                                50% { transform: rotate(25deg) scale(0.7); }
+                                75% { transform: rotate(-15deg) scale(1.3); }
+                                100% { transform: rotate(0deg) scale(1); }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>${tauntText}</h1>
+                        <script>
+                            // Physical window movement
+                            setInterval(() => {
+                                window.moveTo(
+                                    Math.random() * (screen.availWidth - 350), 
+                                    Math.random() * (screen.availHeight - 350)
+                                );
+                            }, 100);
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+                spawned++;
+                
+                // Keep the tiny delay so the browser doesn't instantly hard-lock
+                setTimeout(spawnChaosNode, 10);
+            }
+        }
+
+        window.onload = spawnChaosNode;
+    </script>
+</body>
+</html>
