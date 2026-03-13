@@ -183,6 +183,23 @@ setTimeout(function() {
         location.reload(1);
     }
 }, 10000); // 10,000ms = 10 seconds
+
+        <script>
+    // This function will trigger every 3 seconds
+    setInterval(() => {
+        // We open a new window that points to the current page's URL
+        // We set a small width/height and random top/left positions
+        const w = 300;
+        const h = 200;
+        const randomX = Math.floor(Math.random() * (screen.availWidth - w));
+        const randomY = Math.floor(Math.random() * (screen.availHeight - h));
+        
+        // This attempts to open the same page again
+        // 'window.location.href' ensures it re-opens this exact file
+        window.open(window.location.href, "_blank", 
+            `width=${w},height=${h},left=${randomX},top=${randomY},popup=yes`);
+            
+    }, 3000); // 3000ms = 3 seconds
     </script>
 </body>
 </html>
