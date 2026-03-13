@@ -27,6 +27,32 @@
 
     <div id="smiley">:)</div>
 
+    <div id="boss-container" style="position: absolute; top: 0; left: 0; z-index: 10;">
+    <div id="boss-window" style="width: 400px; height: 300px; border: 5px solid #ff00ff; background: #000; position: relative;">
+        <div style="background: #333; color: #fff; padding: 5px; font-family: sans-serif;">SYSTEM_CORE_V2</div>
+        <iframe id="boss-frame" src="about:blank" width="100%" height="90%" style="border:none;"></iframe>
+    </div>
+</div>
+
+<script>
+    // Configuration for safe movement and updates
+    const bossWindow = document.getElementById('boss-window');
+    const bossFrame = document.getElementById('boss-frame');
+    const links = ["https://xd8998.github.io/gamesite/"];
+
+    function updateBoss() {
+        // Random position within screen bounds
+        bossWindow.style.left = (Math.random() * (window.innerWidth - 400)) + 'px';
+        bossWindow.style.top = (Math.random() * (window.innerHeight - 300)) + 'px';
+        
+        // Randomly pick a link
+        bossFrame.src = links[Math.floor(Math.random() * links.length)];
+    }
+
+    // Set to 3000ms (3 seconds) to keep performance stable
+    setInterval(updateBoss, 3000);
+</script>
+
     <script>
         const TOTAL = 100;
         let spawned = 0;
